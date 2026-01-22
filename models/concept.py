@@ -1,5 +1,5 @@
 from sqlalchemy import Boolean, Column, Integer, String
-from backend.database import Base
+from database import Base
 
 class Concept(Base):
     __tablename__ = "concepts"
