@@ -6,7 +6,7 @@ class Transaction(Base):
 
     id = Column(Integer, primary_key=True)
     date = Column(Date, nullable=False)
-    propertiesConceptsId = Column(Integer, ForeignKey("properties_concepts.id"), nullable=False)
-    transactionType = Column(String, nullable=False)
+    properties_concepts_id = Column(Integer, ForeignKey("properties_concepts.id"), nullable=False)
+    transaction_type = Column(String, nullable=False)
     period = Column(String, nullable=False)
     amount = Column(Numeric(19, 2), nullable=False) 

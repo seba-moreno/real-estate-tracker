@@ -7,35 +7,35 @@ class PropertiesConceptsRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_by_id(self, propertiesConceptsId: int) -> Optional[PropertiesConcepts]:
-        return self.db.query(PropertiesConcepts).filter(PropertiesConcepts.id == propertiesConceptsId).first()
+    def get_by_id(self, properties_concepts_id: int) -> Optional[PropertiesConcepts]:
+        return self.db.query(PropertiesConcepts).filter(PropertiesConcepts.id == properties_concepts_id).first()
         
     def get_all(self) -> List[PropertiesConcepts]:
         return self.db.query(PropertiesConcepts).all()
     
-    def create(self, propertiesConcepts: PropertiesConcepts) -> PropertiesConcepts:
-        newpropertiesConcepts = PropertiesConcepts(**propertiesConcepts)
-        self.db.add(newpropertiesConcepts)
+    def create(self, properties_concepts: PropertiesConcepts) -> PropertiesConcepts:
+        new_properties_concepts = PropertiesConcepts(**properties_concepts)
+        self.db.add(new_properties_concepts)
         self.db.commit()
-        self.db.refresh(newpropertiesConcepts)
+        self.db.refresh(new_properties_concepts)
         
-        return newpropertiesConcepts
+        return new_properties_concepts
     
-    def update(self, propertiesConceptsId: int, propertiesConcepts: PropertiesConcepts) -> Optional[PropertiesConcepts]:
-        db_propertiesConcepts = self.get_by_id(propertiesConceptsId)
+    def update(self, properties_concepts_id: int, propertiesConcepts: PropertiesConcepts) -> Optional[PropertiesConcepts]:
+        db_properties_concepts = self.get_by_id(properties_concepts_id)
         
-        if db_propertiesConcepts:
+        if db_properties_concepts:
             for key, value in propertiesConcepts.model_dump().items():
-                setattr(db_propertiesConcepts, key, value)
+                setattr(db_properties_concepts, key, value)
             self.db.commit()
-            self.db.refresh(db_propertiesConcepts)
-        return db_propertiesConcepts
+            self.db.refresh(db_properties_concepts)
+        return db_properties_concepts
     
-    def delete(self, propertiesConceptsId: int) -> bool:
-        db_propertiesConcepts = self.get_by_id(propertiesConceptsId)
+    def delete(self, properties_concepts_id: int) -> bool:
+        db_properties_concepts = self.get_by_id(properties_concepts_id)
         
-        if db_propertiesConcepts:
-            self.db.delete(db_propertiesConcepts)
+        if db_properties_concepts:
+            self.db.delete(db_properties_concepts)
             self.db.commit()
             return True
         return False

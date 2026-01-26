@@ -7,22 +7,22 @@ class TransactionRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_by_id(self, transactionId: int) -> Optional[Transaction]:
-        return self.db.query(Transaction).filter(Transaction.id == transactionId).first()
+    def get_by_id(self, transaction_id: int) -> Optional[Transaction]:
+        return self.db.query(Transaction).filter(Transaction.id == transaction_id).first()
         
     def get_all(self) -> List[Transaction]:
         return self.db.query(Transaction).all()
     
     def create(self, transaction: Transaction) -> Transaction:
-        newTransaction = Transaction(**transaction)
-        self.db.add(newTransaction)
+        new_transaction = Transaction(**transaction)
+        self.db.add(new_transaction)
         self.db.commit()
-        self.db.refresh(newTransaction)
+        self.db.refresh(new_transaction)
         
-        return newTransaction
+        return new_transaction
     
-    def update(self, transactionId: int, transaction: Transaction) -> Optional[Transaction]:
-        db_transaction = self.get_by_id(transactionId)
+    def update(self, transaction_id: int, transaction: Transaction) -> Optional[Transaction]:
+        db_transaction = self.get_by_id(transaction_id)
         
         if db_transaction:
             for key, value in transaction.model_dump().items():
@@ -31,8 +31,8 @@ class TransactionRepository:
             self.db.refresh(db_transaction)
         return db_transaction
     
-    def delete(self, transactionId: int) -> bool:
-        db_transaction = self.get_by_id(transactionId)
+    def delete(self, transaction_id: int) -> bool:
+        db_transaction = self.get_by_id(transaction_id)
         
         if db_transaction:
             self.db.delete(db_transaction)

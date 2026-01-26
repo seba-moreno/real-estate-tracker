@@ -7,22 +7,22 @@ class ContractRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_by_id(self, contractId: int) -> Optional[Contract]:
-        return self.db.query(Contract).filter(Contract.id == contractId).first()
+    def get_by_id(self, contract_id: int) -> Optional[Contract]:
+        return self.db.query(Contract).filter(Contract.id == contract_id).first()
         
     def get_all(self) -> List[Contract]:
         return self.db.query(Contract).all()
     
     def create(self, contract: Contract) -> Contract:
-        newcontract = Contract(**contract)
-        self.db.add(newcontract)
+        new_contract = Contract(**contract)
+        self.db.add(new_contract)
         self.db.commit()
-        self.db.refresh(newcontract)
+        self.db.refresh(new_contract)
         
-        return newcontract
+        return new_contract
     
-    def update(self, contractId: int, contract: Contract) -> Optional[Contract]:
-        db_contract = self.get_by_id(contractId)
+    def update(self, contract_id: int, contract: Contract) -> Optional[Contract]:
+        db_contract = self.get_by_id(contract_id)
         
         if db_contract:
             for key, value in contract.model_dump().items():
@@ -31,8 +31,8 @@ class ContractRepository:
             self.db.refresh(db_contract)
         return db_contract
     
-    def delete(self, contractId: int) -> bool:
-        db_contract = self.get_by_id(contractId)
+    def delete(self, contract_id: int) -> bool:
+        db_contract = self.get_by_id(contract_id)
         
         if db_contract:
             self.db.delete(db_contract)

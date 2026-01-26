@@ -5,7 +5,7 @@ class Concept(Base):
     __tablename__ = "concepts"
 
     id = Column(Integer, primary_key=True)
-    category = Column(String, nullable=False)
-    isOrdinary = Column(Boolean, nullable=False)
+    name = Column(String, nullable=False)
+    is_ordinary = Column(Boolean, nullable=False)
     periodicity = Column(Integer, nullable=True)
     description = Column(String, nullable=True)
