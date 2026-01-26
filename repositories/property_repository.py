@@ -1,42 +1,64 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from models.property import Property
+from repositories.base_repository import BaseRepository
+from schemas.property import CreateProperty, PropertyResponse, UpdateProperty
+from sqlalchemy.exc import SQLAlchemyError
 
-class PropertyRepository:
+class PropertyRepository(BaseRepository):
+    dto_model = PropertyResponse
     
     def __init__(self, db: Session):
         self.db = db
 
-    def get_by_id(self, property_id: int) -> Optional[Property]:
-        return self.db.query(Property).filter(Property.id == property_id).first()
+    def get_by_id(self, property_id: int) -> Optional[PropertyResponse]:
+        result = self.db.get(Property, property_id)
+
+        if(not result):
+            return None
         
-    def get_all(self) -> List[Property]:
-        return self.db.query(Property).all()
-    
-    def create(self, property: Property) -> Property:
-        new_property = Property(**property)
-        self.db.add(new_property)
-        self.db.commit()
-        self.db.refresh(new_property)
+        return self.to_dto(result)
+
+    def get_all(self) -> List[PropertyResponse]:
+        results = self.db.query(Property).all()
+        return self.to_dto_list(results)
+
+    def create(self, property: CreateProperty) -> PropertyResponse:
+        new_property = Property(**property.model_dump())
+
+        try:
+            self.db.add(new_property)
+            self.db.commit()
+            self.db.refresh(new_property)
+
+        except SQLAlchemyError:
+            self.db.rollback()
         
-        return new_property
-    
-    def update(self, property_id: int, property: Property) -> Optional[Property]:
-        db_property = self.get_by_id(property_id)
-        
+        return self.to_dto(new_property)
+
+    def update(self, property_id: int, property: UpdateProperty) -> PropertyResponse:
+        db_property = self.db.get(Property, property_id)
+
         if db_property:
             for key, value in property.model_dump().items():
                 setattr(db_property, key, value)
-            self.db.commit()
-            self.db.refresh(db_property)
-        return db_property
-    
+
+            try:    
+                self.db.commit()
+                self.db.refresh(db_property)
+            except SQLAlchemyError:
+                self.db.rollback()
+        return self.to_dto(db_property) 
+
     def delete(self, property_id: int) -> bool:
-        db_property = self.get_by_id(property_id)
+        db_property = self.db.get(Property, property_id)
         
         if db_property:
-            self.db.delete(db_property)
-            self.db.commit()
-            return True
-        return False
-    
+            try:
+                self.db.delete(db_property)
+                self.db.commit()
+                return True
+            except SQLAlchemyError:
+                self.db.rollback()
+                return False
+        return False    
