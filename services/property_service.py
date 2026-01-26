@@ -22,7 +22,7 @@ class PropertyService:
         
         return existing_property
     
-    def get_all_propertys(self) -> List[PropertyResponse]:
+    def get_all_properties(self) -> List[PropertyResponse]:
         return self.property_repository.get_all()
 
     def create_property(self, property: CreateProperty) -> PropertyResponse:
