@@ -22,10 +22,10 @@ def add_initial_properties(session: Session):
     session.commit()
 
 def add_initial_concepts(session: Session):
-    concept1 = Concept(id=1, category="Alquiler mensual", is_ordinary=True, periodicity= 1)
-    concept2 = Concept(id=2, category="API Santa Fe", is_ordinary=True, periodicity= 2, description="Pago de impuesto inmobiliario urbano o rural. Vencimiento bimestral")
-    concept3 = Concept(id=3, category="TGI Rosario", is_ordinary=True, periodicity= 1)
-    concept3 = Concept(id=4, category="Alquiler semestral", is_ordinary=True, periodicity= 6)
+    concept1 = Concept(id=1, name="Alquiler mensual", is_ordinary=True, periodicity= 1)
+    concept2 = Concept(id=2, name="API Santa Fe", is_ordinary=True, periodicity= 2, description="Pago de impuesto inmobiliario urbano o rural. Vencimiento bimestral")
+    concept3 = Concept(id=3, name="TGI Rosario", is_ordinary=True, periodicity= 1)
+    concept3 = Concept(id=4, name="Alquiler semestral", is_ordinary=True, periodicity= 6)
     session.add_all([concept1, concept2, concept3])
     session.commit()
 
