@@ -5,7 +5,7 @@ from database import get_db
 from schemas.property import CreateProperty, PropertyResponse, UpdateProperty
 from services.property_service import PropertyService
 
-router = APIRouter()
+router = APIRouter(prefix="/property", tags=["property"])
 
 @router.get("/{property_id}", response_model=PropertyResponse, status_code=status.HTTP_200_OK)
 def get_property(property_id: int, db: Session = Depends(get_db)):

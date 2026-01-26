@@ -20,7 +20,7 @@ class ConceptBase(BaseModel):
     )
 
     name: Annotated[str, Field(min_length=1, max_length=100, description="Human-friendly concept name")]
-    isOrdinary: Annotated[bool, Field(description="Whether the concept is ordinary/recurring")]
+    is_ordinary: Annotated[bool, Field(description="Whether the concept is ordinary/recurring")]
     periodicity: Annotated[Optional[int], Field(default=None, ge=0, description="Recurrence interval in months (≥ 0)")]
     description: Annotated[Optional[str], Field(default=None, max_length=500, description="Optional additional details")]
 
