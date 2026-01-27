@@ -5,7 +5,7 @@ from database import get_db
 from schemas.properties_concepts import CreatePropertiesConcepts, PropertiesConceptsResponse, UpdatePropertiesConcepts
 from services.properties_concepts_service import PropertiesConceptsService
 
-router = APIRouter(prefix="/properties-concepts", tags=["properties-concepts"])
+router = APIRouter(prefix="/properties-concepts", tags=["Properties Concepts"])
 
 @router.get("/{properties_concepts_id}", response_model=PropertiesConceptsResponse, status_code=status.HTTP_200_OK)
 def get_properties_concepts(properties_concepts_id: int, db: Session = Depends(get_db)):

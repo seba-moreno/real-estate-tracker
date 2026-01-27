@@ -5,7 +5,7 @@ from database import get_db
 from schemas.transaction import CreateTransaction, TransactionResponse, UpdateTransaction
 from services.transaction_service import TransactionService
 
-router = APIRouter(prefix="/transaction", tags=["transaction"])
+router = APIRouter(prefix="/transaction", tags=["Transaction"])
 
 @router.get("/{transaction_id}", response_model=TransactionResponse, status_code=status.HTTP_200_OK)
 def get_transaction(transaction_id: int, db: Session = Depends(get_db)):

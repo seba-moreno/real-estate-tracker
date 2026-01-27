@@ -5,7 +5,7 @@ from database import get_db
 from schemas.concept import CreateConcept, ConceptResponse, UpdateConcept
 from services.concept_service import ConceptService
 
-router = APIRouter(prefix="/concept", tags=["concept"])
+router = APIRouter(prefix="/concept", tags=["Concept"])
 
 @router.get("/{concept_id}", response_model=ConceptResponse, status_code=status.HTTP_200_OK)
 def get_concept(concept_id: int, db: Session = Depends(get_db)):

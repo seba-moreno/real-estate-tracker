@@ -5,7 +5,7 @@ from database import get_db
 from schemas.contract import CreateContract, ContractResponse, UpdateContract
 from services.contract_service import ContractService
 
-router = APIRouter(prefix="/contract", tags=["contract"])
+router = APIRouter(prefix="/contract", tags=["Contract"])
 
 @router.get("/{contract_id}", response_model=ContractResponse, status_code=status.HTTP_200_OK)
 def get_contract(contract_id: int, db: Session = Depends(get_db)):
