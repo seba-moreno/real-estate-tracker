@@ -1,0 +1,18 @@
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.12"
+warn_unused_configs = true
+strict = true
+plugins = ["pydantic.mypy"]
+exclude = [
+  "^alembic/",
+  "^.venv/",
+  "^venv/",
+  "^env/",
+]

@@ -1,6 +1,7 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer
 from database import Base
 
+
 class PropertiesConcepts(Base):
     __tablename__ = "properties_concepts"
 

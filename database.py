@@ -1,19 +1,28 @@
-from typing import Generator
+from __future__ import annotations
+
+from typing import Iterator
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base, Session
+from sqlalchemy.engine import Engine
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 
 SQLALCHEMY_DB_URL = "sqlite:///./database.db"
 
-engine = create_engine(
+engine: Engine = create_engine(
     SQLALCHEMY_DB_URL,
-    connect_args={"check_same_thread": False}
+    connect_args={"check_same_thread": False},
 )
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+SessionLocal: sessionmaker[Session] = sessionmaker(
+    bind=engine, autoflush=False, autocommit=False
+)
 
-def get_db() -> Generator[Session, None, None]:
+
+class Base(DeclarativeBase):
+    pass
+
+
+def get_db() -> Iterator[Session]:
     db = SessionLocal()
     try:
         yield db

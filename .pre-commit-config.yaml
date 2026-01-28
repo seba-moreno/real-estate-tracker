@@ -1,0 +1,36 @@
+repos:
+  # --- Ruff (Linter + Formatter) ---
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.5
+    hooks:
+      - id: ruff
+        args: ["--fix"]
+      - id: ruff-format
+
+  # --- Pylint (install runtime deps into hook env) ---
+  - repo: https://github.com/pycqa/pylint
+    rev: v3.2.6
+    hooks:
+      - id: pylint
+        args: ["--exit-zero"]
+        additional_dependencies:
+          - "fastapi>=0.110"
+          - "starlette>=0.37"
+          - "sqlalchemy>=2.0"
+          - "alembic>=1.13"
+          - "pydantic>=2"
+
+  # --- Mypy (type checking; with plugin & runtime deps) ---
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.1
+    hooks:
+      - id: mypy
+        args: ["--config-file=pyproject.toml"]
+        additional_dependencies:
+          - "pydantic>=2"
+          - "pydantic[mypy]"
+          - "fastapi>=0.110"
+          - "starlette>=0.37"
+          - "sqlalchemy>=2.0"
+          - "alembic>=1.13"
+          - "typing-extensions>=4.9"

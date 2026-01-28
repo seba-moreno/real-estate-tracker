@@ -1,4 +1,3 @@
-
 from logging.config import dictConfig
 
 LOGGING = {
@@ -7,7 +6,7 @@ LOGGING = {
     "formatters": {
         "default": {
             "format": "%(asctime)s [%(levelname)s] %(name)s "
-                      "[correlation_id=%(correlation_id)s] %(message)s"
+            "[correlation_id=%(correlation_id)s] %(message)s"
         }
     },
     "handlers": {
@@ -16,11 +15,9 @@ LOGGING = {
             "formatter": "default",
         }
     },
-    "root": {
-        "level": "INFO",
-        "handlers": ["default"]
-    },
+    "root": {"level": "INFO", "handlers": ["default"]},
 }
 
-def setup_logging():
+
+def setup_logging() -> None:
     dictConfig(LOGGING)

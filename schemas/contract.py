@@ -1,7 +1,8 @@
 from __future__ import annotations
 from datetime import date
-from typing import Optional, Annotated
+from typing import Optional, Annotated, Self
 from pydantic import BaseModel, Field, ConfigDict, field_validator, model_validator
+
 
 class ContractBase(BaseModel):
     model_config = ConfigDict(
@@ -20,10 +21,15 @@ class ContractBase(BaseModel):
         },
     )
 
-    property_id: Annotated[int, Field(ge=1, description="Id of the Property that the contract belongs to")]
+    property_id: Annotated[
+        int, Field(ge=1, description="Id of the Property that the contract belongs to")
+    ]
     start_date: Annotated[date, Field(description="Contract's start date (YYYY-MM-DD)")]
     end_date: Annotated[date, Field(description="Contract's end date (YYYY-MM-DD)")]
-    details: Annotated[Optional[str], Field(default=None, max_length=500, description="Optional additional details")]
+    details: Annotated[
+        Optional[str],
+        Field(default=None, max_length=500, description="Optional additional details"),
+    ]
 
     @field_validator("details", mode="before")
     @classmethod
@@ -32,19 +38,23 @@ class ContractBase(BaseModel):
             return None
         s = v.strip()
         return s if s else None
-    
-    
+
     @model_validator(mode="after")
-    def _validate_date_order(self):
+    def _validate_date_order(self) -> Self:
         if self.end_date < self.start_date:
             raise ValueError("endDate must be on or after startDate.")
         return self
 
+
 class CreateContract(ContractBase):
     pass
+
 
 class UpdateContract(ContractBase):
     pass
 
+
 class ContractResponse(ContractBase):
-    id: Annotated[int, Field(ge=1, description="Unique identifier assigned by the system")] 
+    id: Annotated[
+        int, Field(ge=1, description="Unique identifier assigned by the system")
+    ]
