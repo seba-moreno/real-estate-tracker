@@ -1,7 +1,5 @@
-from typing import Optional
 from sqlalchemy.orm import Session
-from fastapi import Depends, HTTPException, status
-from core.dependencies.logger import get_request_logger
+from fastapi import HTTPException, status
 from core.logging.logger_with_correlation_id import CorrelationLoggerAdapter
 from repositories.properties_concepts_repository import PropertiesConceptsRepository
 from schemas.properties_concepts import (
@@ -15,14 +13,14 @@ class PropertiesConceptsService:
     def __init__(
         self,
         db: Session,
-        logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+        logger: CorrelationLoggerAdapter,
     ) -> None:
         self.properties_concepts_repository = PropertiesConceptsRepository(db)
         self.logger = logger
 
     def get_properties_concepts_by_id(
         self, properties_concepts_id: int
-    ) -> Optional[PropertiesConceptsResponse]:
+    ) -> None | PropertiesConceptsResponse:
         existing_properties_concepts = self.properties_concepts_repository.get_by_id(
             properties_concepts_id
         )

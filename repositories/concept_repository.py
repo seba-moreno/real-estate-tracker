@@ -1,4 +1,3 @@
-from typing import Optional
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from models.concept import Concept
@@ -12,7 +11,7 @@ class ConceptRepository(BaseRepository[ConceptResponse]):
     def __init__(self, db: Session) -> None:
         self.db = db
 
-    def get_by_id(self, concept_id: int) -> Optional[ConceptResponse]:
+    def get_by_id(self, concept_id: int) -> None | ConceptResponse:
         result = self.db.get(Concept, concept_id)
 
         if not result:

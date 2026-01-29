@@ -1,7 +1,7 @@
 from __future__ import annotations
 from decimal import Decimal
-from typing import Optional, Annotated
-from pydantic import BaseModel, Field, ConfigDict, field_validator
+from typing import Annotated
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class PropertyBase(BaseModel):
@@ -25,7 +25,7 @@ class PropertyBase(BaseModel):
         str, Field(min_length=1, max_length=100, description="Property's adress")
     ]
     area: Annotated[
-        Optional[int], Field(default=None, ge=1, description="Property's size in m2")
+        None | int, Field(default=None, ge=1, description="Property's size in m2")
     ]
     valuation: Annotated[
         Decimal,
@@ -34,16 +34,9 @@ class PropertyBase(BaseModel):
         ),
     ]
     details: Annotated[
-        Optional[str],
+        None | str,
         Field(default=None, max_length=500, description="Optional additional details"),
     ]
-
-    @field_validator("location", "details", mode="before")
-    @classmethod
-    def _trim_strings(cls, v: Optional[str]) -> Optional[str]:
-        if isinstance(v, str):
-            v = v.strip()
-        return v
 
 
 class CreateProperty(PropertyBase):

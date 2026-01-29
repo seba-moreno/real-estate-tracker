@@ -15,7 +15,7 @@ from api.v1.routes.property import router as property_router
 from api.v1.routes.transaction import router as transaction_router
 
 app = FastAPI(
-    title="Real State Tracker",
+    title="Real Estate Tracker",
     version="1.0.0",
 )
 

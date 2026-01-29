@@ -1,4 +1,3 @@
-from typing import Optional
 from sqlalchemy.orm import Session
 from models.property import Property
 from repositories.base_repository import BaseRepository
@@ -12,7 +11,7 @@ class PropertyRepository(BaseRepository[PropertyResponse]):
     def __init__(self, db: Session) -> None:
         self.db = db
 
-    def get_by_id(self, property_id: int) -> Optional[PropertyResponse]:
+    def get_by_id(self, property_id: int) -> None | PropertyResponse:
         result = self.db.get(Property, property_id)
 
         if not result:

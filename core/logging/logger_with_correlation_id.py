@@ -1,7 +1,5 @@
-from __future__ import annotations
-
 import logging
-from typing import Any, MutableMapping, Optional
+from typing import Any, MutableMapping
 from fastapi import Request
 
 
@@ -24,9 +22,7 @@ class CorrelationLoggerAdapter(logging.LoggerAdapter[logging.Logger]):
         return msg, kwargs
 
 
-def get_logger(
-    name: str, request: Optional[Request] = None
-) -> CorrelationLoggerAdapter:
+def get_logger(name: str, request: None | Request = None) -> CorrelationLoggerAdapter:
     logger = logging.getLogger(name)
     correlation_id = (
         getattr(request.state, "correlation_id", "N/A") if request else "N/A"

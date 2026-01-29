@@ -1,4 +1,3 @@
-from typing import Optional
 from sqlalchemy.orm import Session
 from models.contract import Contract
 from repositories.base_repository import BaseRepository
@@ -12,7 +11,7 @@ class ContractRepository(BaseRepository[ContractResponse]):
     def __init__(self, db: Session) -> None:
         self.db = db
 
-    def get_by_id(self, contract_id: int) -> Optional[ContractResponse]:
+    def get_by_id(self, contract_id: int) -> None | ContractResponse:
         result = self.db.get(Contract, contract_id)
 
         if not result:

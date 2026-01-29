@@ -75,7 +75,7 @@ def add_initial_transactions(session: Session) -> None:
         date=date(2026, 1, 4),
         properties_concepts_id=1,
         transaction_type="Income",
-        period="2026.01",
+        period="2026-01",
         amount=400,
     )
     t2 = Transaction(
@@ -83,7 +83,7 @@ def add_initial_transactions(session: Session) -> None:
         date=date(2026, 1, 4),
         properties_concepts_id=2,
         transaction_type="Expense",
-        period="2026.01",
+        period="2026-01",
         amount=20,
     )
     t3 = Transaction(
@@ -91,7 +91,7 @@ def add_initial_transactions(session: Session) -> None:
         date=date(2026, 1, 4),
         properties_concepts_id=1,
         transaction_type="Income",
-        period="2025.12",
+        period="2025-12",
         amount=400,
     )
     t4 = Transaction(
@@ -99,7 +99,7 @@ def add_initial_transactions(session: Session) -> None:
         date=date(2026, 6, 19),
         properties_concepts_id=7,
         transaction_type="Income",
-        period="2025.12 2026.06",
+        period="2025-12",
         amount=20000,
     )
     t5 = Transaction(
@@ -107,7 +107,7 @@ def add_initial_transactions(session: Session) -> None:
         date=date(2026, 1, 4),
         properties_concepts_id=5,
         transaction_type="Expense",
-        period="2026.01",
+        period="2026-01",
         amount=20,
     )
     t6 = Transaction(
@@ -115,7 +115,7 @@ def add_initial_transactions(session: Session) -> None:
         date=date(2026, 1, 4),
         properties_concepts_id=6,
         transaction_type="Expense",
-        period="2026.01",
+        period="2026-01",
         amount=40,
     )
     session.add_all([t1, t2, t3, t4, t5, t6])

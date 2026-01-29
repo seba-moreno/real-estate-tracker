@@ -1,7 +1,5 @@
-from typing import Optional
 from sqlalchemy.orm import Session
-from fastapi import Depends, HTTPException, status
-from core.dependencies.logger import get_request_logger
+from fastapi import HTTPException, status
 from core.logging.logger_with_correlation_id import CorrelationLoggerAdapter
 from repositories.contract_repository import ContractRepository
 from schemas.contract import ContractResponse, CreateContract, UpdateContract
@@ -11,12 +9,12 @@ class ContractService:
     def __init__(
         self,
         db: Session,
-        logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+        logger: CorrelationLoggerAdapter,
     ) -> None:
         self.contract_repository = ContractRepository(db)
         self.logger = logger
 
-    def get_contract_by_id(self, contract_id: int) -> Optional[ContractResponse]:
+    def get_contract_by_id(self, contract_id: int) -> None | ContractResponse:
         existing_contract = self.contract_repository.get_by_id(contract_id)
 
         if not existing_contract:

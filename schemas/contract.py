@@ -1,7 +1,7 @@
 from __future__ import annotations
 from datetime import date
-from typing import Optional, Annotated, Self
-from pydantic import BaseModel, Field, ConfigDict, field_validator, model_validator
+from typing import Annotated, Self
+from pydantic import BaseModel, Field, ConfigDict, model_validator
 
 
 class ContractBase(BaseModel):
@@ -27,17 +27,9 @@ class ContractBase(BaseModel):
     start_date: Annotated[date, Field(description="Contract's start date (YYYY-MM-DD)")]
     end_date: Annotated[date, Field(description="Contract's end date (YYYY-MM-DD)")]
     details: Annotated[
-        Optional[str],
+        None | str,
         Field(default=None, max_length=500, description="Optional additional details"),
     ]
-
-    @field_validator("details", mode="before")
-    @classmethod
-    def _normalize_details(cls, v: Optional[str]) -> Optional[str]:
-        if v is None:
-            return None
-        s = v.strip()
-        return s if s else None
 
     @model_validator(mode="after")
     def _validate_date_order(self) -> Self:

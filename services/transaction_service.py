@@ -1,7 +1,5 @@
-from typing import Optional
 from sqlalchemy.orm import Session
-from fastapi import Depends, HTTPException, status
-from core.dependencies.logger import get_request_logger
+from fastapi import HTTPException, status
 from core.logging.logger_with_correlation_id import CorrelationLoggerAdapter
 from repositories.transaction_repository import TransactionRepository
 from schemas.transaction import (
@@ -15,14 +13,12 @@ class TransactionService:
     def __init__(
         self,
         db: Session,
-        logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+        logger: CorrelationLoggerAdapter,
     ) -> None:
         self.transaction_repository = TransactionRepository(db)
         self.logger = logger
 
-    def get_transaction_by_id(
-        self, transaction_id: int
-    ) -> Optional[TransactionResponse]:
+    def get_transaction_by_id(self, transaction_id: int) -> None | TransactionResponse:
         existing_transaction = self.transaction_repository.get_by_id(transaction_id)
 
         if not existing_transaction:

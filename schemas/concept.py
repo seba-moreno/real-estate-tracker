@@ -1,6 +1,6 @@
 from __future__ import annotations
-from typing import Optional, Annotated
-from pydantic import BaseModel, Field, ConfigDict, field_validator
+from typing import Annotated
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class ConceptBase(BaseModel):
@@ -12,7 +12,7 @@ class ConceptBase(BaseModel):
             "examples": [
                 {
                     "name": "Lease collection",
-                    "isOrdinary": True,
+                    "is_ordinary": True,
                     "periodicity": 1,
                     "description": "Monthly lease collection",
                 }
@@ -28,20 +28,13 @@ class ConceptBase(BaseModel):
         bool, Field(description="Whether the concept is ordinary/recurring")
     ]
     periodicity: Annotated[
-        Optional[int],
+        None | int,
         Field(default=None, ge=0, description="Recurrence interval in months (≥ 0)"),
     ]
     description: Annotated[
-        Optional[str],
+        None | str,
         Field(default=None, max_length=500, description="Optional additional details"),
     ]
-
-    @field_validator("name", "description", mode="before")
-    @classmethod
-    def _trim_strings(cls, v: Optional[str]) -> Optional[str]:
-        if isinstance(v, str):
-            v = v.strip()
-        return v
 
 
 class CreateConcept(ConceptBase):

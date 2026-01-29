@@ -3,7 +3,6 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 from starlette.responses import Response
 from starlette.types import ASGIApp
 import time
-from typing import Dict
 from core.dependencies.logger import get_request_logger
 from core.logging.logger_with_correlation_id import CorrelationLoggerAdapter
 
@@ -17,7 +16,7 @@ class RateLimiterMiddleware(BaseHTTPMiddleware):
     ) -> None:
         super().__init__(app)
         self.requests_per_minute = requests_per_minute
-        self.requests: Dict[str, list[float]] = {}
+        self.requests: dict[str, list[float]] = {}
         self.logger = logger
 
     async def dispatch(

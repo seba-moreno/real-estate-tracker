@@ -1,7 +1,5 @@
-from typing import Optional
 from sqlalchemy.orm import Session
-from fastapi import Depends, HTTPException, status
-from core.dependencies.logger import get_request_logger
+from fastapi import HTTPException, status
 from core.logging.logger_with_correlation_id import CorrelationLoggerAdapter
 from repositories.concept_repository import ConceptRepository
 from schemas.concept import ConceptResponse, CreateConcept, UpdateConcept
@@ -11,12 +9,12 @@ class ConceptService:
     def __init__(
         self,
         db: Session,
-        logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+        logger: CorrelationLoggerAdapter,
     ) -> None:
         self.concept_repository = ConceptRepository(db)
         self.logger = logger
 
-    def get_concept_by_id(self, concept_id: int) -> Optional[ConceptResponse]:
+    def get_concept_by_id(self, concept_id: int) -> None | ConceptResponse:
         existing_concept = self.concept_repository.get_by_id(concept_id)
 
         if not existing_concept:

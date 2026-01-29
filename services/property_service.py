@@ -1,7 +1,5 @@
-from typing import Optional
 from sqlalchemy.orm import Session
-from fastapi import Depends, HTTPException, status
-from core.dependencies.logger import get_request_logger
+from fastapi import HTTPException, status
 from core.logging.logger_with_correlation_id import CorrelationLoggerAdapter
 from repositories.property_repository import PropertyRepository
 from schemas.property import PropertyResponse, CreateProperty, UpdateProperty
@@ -11,12 +9,12 @@ class PropertyService:
     def __init__(
         self,
         db: Session,
-        logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+        logger: CorrelationLoggerAdapter,
     ) -> None:
         self.property_repository = PropertyRepository(db)
         self.logger = logger
 
-    def get_property_by_id(self, property_id: int) -> Optional[PropertyResponse]:
+    def get_property_by_id(self, property_id: int) -> None | PropertyResponse:
         existing_property = self.property_repository.get_by_id(property_id)
 
         if not existing_property:

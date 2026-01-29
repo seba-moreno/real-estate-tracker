@@ -1,4 +1,3 @@
-from typing import Optional
 from sqlalchemy.orm import Session
 from models.transaction import Transaction
 from repositories.base_repository import BaseRepository
@@ -16,7 +15,7 @@ class TransactionRepository(BaseRepository[TransactionResponse]):
     def __init__(self, db: Session) -> None:
         self.db = db
 
-    def get_by_id(self, transaction_id: int) -> Optional[TransactionResponse]:
+    def get_by_id(self, transaction_id: int) -> None | TransactionResponse:
         result = self.db.get(Transaction, transaction_id)
 
         if not result:
