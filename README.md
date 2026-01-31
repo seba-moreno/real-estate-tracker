@@ -58,16 +58,21 @@ The application enables you to manage your properties, define income and expense
 ## Using the Application
 
 1. Register your Properties
+
    Add each property you own or manage in the Properties section.
 
 2. Create your Concepts
+
    Define all income and expense concepts that apply to your properties (e.g., rent, utilities, maintenance).
 
 3. Link Concepts to Properties
+
    In the Properties → Concepts section, assign the appropriate concepts to each property to establish their relationship.
 
 4. Declare Rental Contracts
+
    Go to the Contracts menu to create and manage the rental contracts associated with each property.
 
 5. Record Transactions
+
    Log all collections (income) and payments (expenses) in the Transactions section by selecting the corresponding Property–Concept combination.
