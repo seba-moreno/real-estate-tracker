@@ -132,3 +132,19 @@ class TransactionService:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="An unexpected error occurred while deleting the transaction",
             )
+
+    def get_balance(self) -> float:
+        self.logger.info("Calculating transactions balance")
+
+        try:
+            balance = self.transaction_repository.get_balance()
+            self.logger.info(
+                "Balance calculated successfully", extra={"balance": balance}
+            )
+            return balance
+        except Exception:
+            self.logger.exception("Failed to calculate balance")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="An unexpected error occurred while calculating the balance",
+            )

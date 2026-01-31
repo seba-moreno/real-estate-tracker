@@ -44,11 +44,6 @@ for r in routers_v1:
     app.include_router(r, prefix=API_V1_PREFIX)
 
 
-@app.get("/")
-def root() -> dict[str, str]:
-    return {"message": "Hello world"}
-
-
 @app.get("/health", tags=["Monitoring"])
 def health() -> dict[str, str]:
     return {"status": "ok"}

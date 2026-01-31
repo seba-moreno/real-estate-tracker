@@ -2,6 +2,9 @@ from __future__ import annotations
 from typing import Annotated
 from pydantic import BaseModel, Field, ConfigDict
 
+from schemas.concept import ConceptResponse
+from schemas.property import PropertyResponse
+
 
 class PropertiesConceptsBase(BaseModel):
     model_config = ConfigDict(
@@ -53,3 +56,5 @@ class PropertiesConceptsResponse(PropertiesConceptsBase):
     id: Annotated[
         int, Field(ge=1, description="Unique identifier assigned by the system")
     ]
+    concept: ConceptResponse | None
+    property: PropertyResponse | None

@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from models.properties_concepts import PropertiesConcepts
 from repositories.base_repository import BaseRepository
 from schemas.properties_concepts import (
@@ -27,6 +27,14 @@ class PropertiesConceptsRepository(BaseRepository[PropertiesConceptsResponse]):
 
     def get_all(self) -> list[PropertiesConceptsResponse]:
         results = self.db.query(PropertiesConcepts).all()
+        return self.to_dto_list(results)
+
+    def get_with_navigations(self) -> list[PropertiesConceptsResponse]:
+        results = self.db.query(PropertiesConcepts).options(
+            joinedload(PropertiesConcepts.concept),
+            joinedload(PropertiesConcepts.property),
+        )
+
         return self.to_dto_list(results)
 
     def create(

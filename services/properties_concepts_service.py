@@ -15,15 +15,13 @@ class PropertiesConceptsService:
         db: Session,
         logger: CorrelationLoggerAdapter,
     ) -> None:
-        self.properties_concepts_repository = PropertiesConceptsRepository(db)
+        self.repo = PropertiesConceptsRepository(db)
         self.logger = logger
 
-    def get_properties_concepts_by_id(
+    def get_by_id(
         self, properties_concepts_id: int
     ) -> None | PropertiesConceptsResponse:
-        existing_properties_concepts = self.properties_concepts_repository.get_by_id(
-            properties_concepts_id
-        )
+        existing_properties_concepts = self.repo.get_by_id(properties_concepts_id)
 
         if not existing_properties_concepts:
             self.logger.warning(
@@ -37,19 +35,20 @@ class PropertiesConceptsService:
 
         return existing_properties_concepts
 
-    def get_all_properties_conceptss(self) -> list[PropertiesConceptsResponse]:
-        return self.properties_concepts_repository.get_all()
+    def get_all(self) -> list[PropertiesConceptsResponse]:
+        return self.repo.get_all()
 
-    def create_properties_concepts(
+    def get_combos(self) -> list[PropertiesConceptsResponse]:
+        return self.repo.get_with_navigations()
+
+    def create(
         self, properties_concepts: CreatePropertiesConcepts
     ) -> PropertiesConceptsResponse:
         payload = properties_concepts.model_dump()
         self.logger.info("Creating PropertiesConcepts", extra={"data": payload})
 
         try:
-            created_properties_concepts = self.properties_concepts_repository.create(
-                properties_concepts
-            )
+            created_properties_concepts = self.repo.create(properties_concepts)
             self.logger.info(
                 "PropertiesConcepts created successfully",
                 extra={"data": created_properties_concepts.model_dump()},
@@ -64,12 +63,10 @@ class PropertiesConceptsService:
                 detail="An unexpected error occurred while creating the properties_concepts",
             )
 
-    def update_properties_concepts(
+    def update(
         self, properties_concepts_id: int, properties_concepts: UpdatePropertiesConcepts
     ) -> PropertiesConceptsResponse:
-        existing_properties_concepts = self.properties_concepts_repository.get_by_id(
-            properties_concepts_id
-        )
+        existing_properties_concepts = self.repo.get_by_id(properties_concepts_id)
 
         if not existing_properties_concepts:
             self.logger.warning(
@@ -88,7 +85,7 @@ class PropertiesConceptsService:
         )
 
         try:
-            updated_properties_concepts = self.properties_concepts_repository.update(
+            updated_properties_concepts = self.repo.update(
                 properties_concepts_id, properties_concepts
             )
             self.logger.info(
@@ -109,14 +106,12 @@ class PropertiesConceptsService:
                 detail="An unexpected error occurred while creating the properties_concepts",
             )
 
-    def delete_properties_concepts(self, properties_concepts_id: int) -> None:
+    def delete(self, properties_concepts_id: int) -> None:
         self.logger.info(
             "Removing properties_concepts",
             extra={"properties_concepts_id": properties_concepts_id},
         )
-        existing_properties_concepts = self.properties_concepts_repository.get_by_id(
-            properties_concepts_id
-        )
+        existing_properties_concepts = self.repo.get_by_id(properties_concepts_id)
 
         if not existing_properties_concepts:
             self.logger.warning(
@@ -129,7 +124,7 @@ class PropertiesConceptsService:
             )
 
         try:
-            if not self.properties_concepts_repository.delete(properties_concepts_id):
+            if not self.repo.delete(properties_concepts_id):
                 self.logger.error(
                     "Failed to delete PropertiesConcepts",
                     extra={"properties_concepts_id": properties_concepts_id},

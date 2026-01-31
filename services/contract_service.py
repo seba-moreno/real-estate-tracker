@@ -117,3 +117,36 @@ class ContractService:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="An unexpected error occurred while deleting the contract",
             )
+
+    def get_contracts_ending_within(self, months: int) -> list[ContractResponse]:
+        if months <= 0:
+            self.logger.warning(
+                "Invalid months parameter in get_contracts_ending_within()",
+                extra={"months": months},
+            )
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Months must be a greater than 0 integer",
+            )
+
+        self.logger.info(
+            "Fetching contracts ending within months",
+            extra={"months": months},
+        )
+
+        try:
+            contracts = self.contract_repository.get_ending_within_months(months)
+            self.logger.info(
+                "Fetched contracts ending within period",
+                extra={"months": months, "count": len(contracts)},
+            )
+            return contracts
+        except Exception:
+            self.logger.exception(
+                "Failed to fetch contracts ending within months",
+                extra={"months": months},
+            )
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="An unexpected error occurred while fetching expiring contracts",
+            )

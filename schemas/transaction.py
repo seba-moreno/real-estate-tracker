@@ -109,3 +109,7 @@ class TransactionResponse(TransactionBase):
     id: Annotated[
         int, Field(ge=1, description="Unique identifier assigned by the system")
     ]
+
+
+class TransactionsBalanceResponse(BaseModel):
+    balance: float

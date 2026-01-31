@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from models.contract import Contract
 from repositories.base_repository import BaseRepository
@@ -62,3 +63,18 @@ class ContractRepository(BaseRepository[ContractResponse]):
                 self.db.rollback()
                 return False
         return False
+
+    def get_ending_within_months(self, months: int) -> list[ContractResponse]:
+        if months <= 0:
+            raise ValueError("Months must be > 0")
+
+        results = (
+            self.db.query(Contract)
+            .filter(
+                Contract.end_date >= func.date("now"),
+                Contract.end_date <= func.date("now", f"+{months} months"),
+            )
+            .order_by(Contract.end_date.asc())
+            .all()
+        )
+        return self.to_dto_list(results)

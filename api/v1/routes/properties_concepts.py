@@ -1,3 +1,4 @@
+from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from core.dependencies.logger import get_request_logger
@@ -13,6 +14,26 @@ from services.properties_concepts_service import PropertiesConceptsService
 router = APIRouter(prefix="/properties-concepts", tags=["Properties Concepts"])
 
 
+def get_properties_concepts_service(
+    db: Annotated[Session, Depends(get_db)],
+    logger: Annotated[CorrelationLoggerAdapter, Depends(get_request_logger)],
+) -> PropertiesConceptsService:
+    return PropertiesConceptsService(db, logger)
+
+
+@router.get(
+    "/get-combos",
+    response_model=list[PropertiesConceptsResponse],
+    status_code=status.HTTP_200_OK,
+)
+def list_properties_concepts_combos(
+    service: Annotated[
+        PropertiesConceptsService, Depends(get_properties_concepts_service)
+    ],
+) -> list[PropertiesConceptsResponse]:
+    return service.get_combos()
+
+
 @router.get(
     "/{properties_concepts_id}",
     response_model=PropertiesConceptsResponse,
@@ -20,22 +41,22 @@ router = APIRouter(prefix="/properties-concepts", tags=["Properties Concepts"])
 )
 def get_properties_concepts(
     properties_concepts_id: int,
-    db: Session = Depends(get_db),
-    logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+    service: Annotated[
+        PropertiesConceptsService, Depends(get_properties_concepts_service)
+    ],
 ) -> None | PropertiesConceptsResponse:
-    service = PropertiesConceptsService(db, logger)
-    return service.get_properties_concepts_by_id(properties_concepts_id)
+    return service.get_by_id(properties_concepts_id)
 
 
 @router.get(
     "/", response_model=list[PropertiesConceptsResponse], status_code=status.HTTP_200_OK
 )
-def list_properties_conceptss(
-    db: Session = Depends(get_db),
-    logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+def list_properties_concepts(
+    service: Annotated[
+        PropertiesConceptsService, Depends(get_properties_concepts_service)
+    ],
 ) -> list[PropertiesConceptsResponse]:
-    service = PropertiesConceptsService(db, logger)
-    return service.get_all_properties_conceptss()
+    return service.get_all()
 
 
 @router.post(
@@ -43,11 +64,11 @@ def list_properties_conceptss(
 )
 def create_properties_concepts(
     properties_concepts: CreatePropertiesConcepts,
-    db: Session = Depends(get_db),
-    logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+    service: Annotated[
+        PropertiesConceptsService, Depends(get_properties_concepts_service)
+    ],
 ) -> PropertiesConceptsResponse:
-    service = PropertiesConceptsService(db, logger)
-    return service.create_properties_concepts(properties_concepts)
+    return service.create(properties_concepts)
 
 
 @router.put(
@@ -58,20 +79,18 @@ def create_properties_concepts(
 def update_properties_concepts(
     properties_concepts_id: int,
     properties_concepts: UpdatePropertiesConcepts,
-    db: Session = Depends(get_db),
-    logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+    service: Annotated[
+        PropertiesConceptsService, Depends(get_properties_concepts_service)
+    ],
 ) -> PropertiesConceptsResponse:
-    service = PropertiesConceptsService(db, logger)
-    return service.update_properties_concepts(
-        properties_concepts_id, properties_concepts
-    )
+    return service.update(properties_concepts_id, properties_concepts)
 
 
 @router.delete("/{properties_concepts_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_properties_concepts(
     properties_concepts_id: int,
-    db: Session = Depends(get_db),
-    logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+    service: Annotated[
+        PropertiesConceptsService, Depends(get_properties_concepts_service)
+    ],
 ) -> None:
-    service = PropertiesConceptsService(db, logger)
-    service.delete_properties_concepts(properties_concepts_id)
+    service.delete(properties_concepts_id)

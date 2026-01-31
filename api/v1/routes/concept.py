@@ -1,3 +1,4 @@
+from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from core.dependencies.logger import get_request_logger
@@ -9,34 +10,35 @@ from services.concept_service import ConceptService
 router = APIRouter(prefix="/concept", tags=["Concept"])
 
 
+def get_concept_service(
+    db: Annotated[Session, Depends(get_db)],
+    logger: Annotated[CorrelationLoggerAdapter, Depends(get_request_logger)],
+) -> ConceptService:
+    return ConceptService(db, logger)
+
+
 @router.get(
     "/{concept_id}", response_model=ConceptResponse, status_code=status.HTTP_200_OK
 )
 def get_concept(
     concept_id: int,
-    db: Session = Depends(get_db),
-    logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+    service: Annotated[ConceptService, Depends(get_concept_service)],
 ) -> None | ConceptResponse:
-    service = ConceptService(db, logger)
     return service.get_concept_by_id(concept_id)
 
 
 @router.get("/", response_model=list[ConceptResponse], status_code=status.HTTP_200_OK)
 def list_concepts(
-    db: Session = Depends(get_db),
-    logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+    service: Annotated[ConceptService, Depends(get_concept_service)],
 ) -> list[ConceptResponse]:
-    service = ConceptService(db, logger)
     return service.get_all_concepts()
 
 
 @router.post("/", response_model=ConceptResponse, status_code=status.HTTP_201_CREATED)
 def create_concept(
     concept: CreateConcept,
-    db: Session = Depends(get_db),
-    logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+    service: Annotated[ConceptService, Depends(get_concept_service)],
 ) -> ConceptResponse:
-    service = ConceptService(db, logger)
     return service.create_concept(concept)
 
 
@@ -46,18 +48,14 @@ def create_concept(
 def update_concept(
     concept_id: int,
     concept: UpdateConcept,
-    db: Session = Depends(get_db),
-    logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+    service: Annotated[ConceptService, Depends(get_concept_service)],
 ) -> ConceptResponse:
-    service = ConceptService(db, logger)
     return service.update_concept(concept_id, concept)
 
 
 @router.delete("/{concept_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_concept(
     concept_id: int,
-    db: Session = Depends(get_db),
-    logger: CorrelationLoggerAdapter = Depends(get_request_logger),
+    service: Annotated[ConceptService, Depends(get_concept_service)],
 ) -> None:
-    service = ConceptService(db, logger)
     service.delete_concept(concept_id)

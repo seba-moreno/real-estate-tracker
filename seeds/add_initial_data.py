@@ -39,8 +39,8 @@ def add_initial_concepts(session: Session) -> None:
         description="Pago de impuesto inmobiliario urbano o rural. Vencimiento bimestral",
     )
     concept3 = Concept(id=3, name="TGI Rosario", is_ordinary=True, periodicity=1)
-    concept3 = Concept(id=4, name="Alquiler semestral", is_ordinary=True, periodicity=6)
-    session.add_all([concept1, concept2, concept3])
+    concept4 = Concept(id=4, name="Alquiler semestral", is_ordinary=True, periodicity=6)
+    session.add_all([concept1, concept2, concept3, concept4])
     session.commit()
 
 
@@ -74,7 +74,7 @@ def add_initial_transactions(session: Session) -> None:
         id=1,
         date=date(2026, 1, 4),
         properties_concepts_id=1,
-        transaction_type="Income",
+        transaction_type="income",
         period="2026-01",
         amount=400,
     )
@@ -82,7 +82,7 @@ def add_initial_transactions(session: Session) -> None:
         id=2,
         date=date(2026, 1, 4),
         properties_concepts_id=2,
-        transaction_type="Expense",
+        transaction_type="expense",
         period="2026-01",
         amount=20,
     )
@@ -90,7 +90,7 @@ def add_initial_transactions(session: Session) -> None:
         id=3,
         date=date(2026, 1, 4),
         properties_concepts_id=1,
-        transaction_type="Income",
+        transaction_type="income",
         period="2025-12",
         amount=400,
     )
@@ -98,7 +98,7 @@ def add_initial_transactions(session: Session) -> None:
         id=4,
         date=date(2026, 6, 19),
         properties_concepts_id=7,
-        transaction_type="Income",
+        transaction_type="income",
         period="2025-12",
         amount=20000,
     )
@@ -106,7 +106,7 @@ def add_initial_transactions(session: Session) -> None:
         id=5,
         date=date(2026, 1, 4),
         properties_concepts_id=5,
-        transaction_type="Expense",
+        transaction_type="expense",
         period="2026-01",
         amount=20,
     )
@@ -114,7 +114,7 @@ def add_initial_transactions(session: Session) -> None:
         id=6,
         date=date(2026, 1, 4),
         properties_concepts_id=6,
-        transaction_type="Expense",
+        transaction_type="expense",
         period="2026-01",
         amount=40,
     )

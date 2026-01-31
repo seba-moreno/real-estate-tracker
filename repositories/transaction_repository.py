@@ -1,3 +1,4 @@
+from sqlalchemy import case, func
 from sqlalchemy.orm import Session
 from models.transaction import Transaction
 from repositories.base_repository import BaseRepository
@@ -68,3 +69,27 @@ class TransactionRepository(BaseRepository[TransactionResponse]):
                 self.db.rollback()
                 return False
         return False
+
+    def get_balance(self) -> float:
+        try:
+            balance = self.db.query(
+                func.coalesce(
+                    func.sum(
+                        case(
+                            (
+                                Transaction.transaction_type == "income",
+                                Transaction.amount,
+                            ),
+                            (
+                                Transaction.transaction_type == "expense",
+                                -Transaction.amount,
+                            ),
+                            else_=0,
+                        )
+                    ),
+                    0,
+                )
+            ).scalar()
+            return float(balance or 0.0)
+        except SQLAlchemyError:
+            raise
