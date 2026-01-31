@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant Client as API Client
+    participant API as FastAPI Application
+    participant Service as Service Layer
+    participant DB as Database
+    participant Billing as External Billing System
+
+    Client->>API: POST /transactions
+    API->>Service: Validate & transform request
+    Service->>DB: Insert Transaction
+    DB-->>Service: Transaction saved
+    Service->>Billing: Send billing event (amount, property, concept)
+    Billing-->>Service: Billing confirmation
+    Service-->>API: Return created transaction + billing status
+    API-->>Client: 201 Created (JSON)

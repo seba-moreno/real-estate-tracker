@@ -1,0 +1,49 @@
+erDiagram
+  CONCEPT {
+    INT id PK "NOT NULL"
+    VARCHAR name "NOT NULL"
+    BOOLEAN is_ordinary "NOT NULL"
+    INT periodicity "NULL"
+    VARCHAR description "NULL"
+  }
+
+  PROPERTY {
+    INT id PK "NOT NULL"
+    VARCHAR location "NOT NULL"
+    INT area "NULL"
+    NUMERIC_19_2 valuation "NOT NULL"
+    VARCHAR details "NULL"
+  }
+
+  CONTRACT {
+    INT id PK "NOT NULL"
+    INT property_id FK "UNIQUE, NOT NULL -> PROPERTY.id"
+    DATE start_date "NOT NULL"
+    DATE end_date "NOT NULL"
+    VARCHAR details "NULL"
+  }
+
+  PROPERTIES_CONCEPTS {
+    INT id PK "NOT NULL"
+    INT concept_id FK "NOT NULL -> CONCEPT.id"
+    INT property_id FK "NOT NULL -> PROPERTY.id"
+    BOOLEAN enabled "NOT NULL"
+  }
+
+  TRANSACTION {
+    INT id PK "NOT NULL"
+    DATE date "NOT NULL"
+    INT properties_concepts_id FK "NOT NULL -> PROPERTIES_CONCEPTS.id"
+    VARCHAR transaction_type "NOT NULL"
+    VARCHAR period "NOT NULL"
+    NUMERIC_19_2 amount "NOT NULL"
+  }
+
+  %% Relationships & cardinalities
+  PROPERTY o|--|| CONTRACT : "has contract"
+
+  CONCEPT ||--o{ PROPERTIES_CONCEPTS : "linked by"
+  PROPERTY ||--o{ PROPERTIES_CONCEPTS : "linked by"
+
+  %% Each transaction belongs to exactly one properties_concepts row
+  PROPERTIES_CONCEPTS ||--o{ TRANSACTION : "generates"
