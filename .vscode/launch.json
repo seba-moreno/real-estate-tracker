@@ -11,7 +11,7 @@
             "request": "launch",
             "module": "uvicorn",
             "args": [
-                "main:app",
+                "app.main:app",
                 "--reload",
                 "--host",
                 "localhost",
@@ -19,7 +19,8 @@
                 "8000"
             ],
             "console": "integratedTerminal",
-            "jinja": true
+            "jinja": true,
+            "cwd": "${workspaceFolder}/src"
         }
     ]
 }

@@ -13,6 +13,7 @@ pre-commit = "4.5.1"
 pydantic = {version = "2.12.5", extras = ["mypy"]}
 streamlit = "1.53.1"
 requests = "2.32.5"
+dependency-injector = "4.48.3"
 
 [dev-packages]
 

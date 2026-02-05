@@ -1,34 +1,64 @@
 [project]
 name = "real-estate-tracker"
 version = "1.0.0"
-description = ""
+description = "Real estate tracking application with layered architecture"
 authors = [
-    {name = "Sebastian Moreno Camani",email = "sebastian.s.moreno.camani@pwc.com"}
+    {name = "Sebastian Moreno Camani", email = "sebastian.s.moreno.camani@pwc.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.12"
 
+# Ruff --------------------------------------
 [tool.ruff]
 line-length = 88
 target-version = "py312"
+src = ["src"]
+exclude = ["alembic", "src/app/presentation/frontend"]
 
 [tool.ruff.format]
 quote-style = "double"
 
+# MyPy --------------------------------------
 [tool.mypy]
 python_version = "3.12"
-warn_unused_configs = true
+mypy_path = "src"
+explicit_package_bases = true
+namespace_packages = true
 strict = true
 plugins = ["pydantic.mypy"]
-exclude = [
-  "^alembic/",
-  "^.venv/",
-  "^venv/",
-  "^env/",
-]
 
+[[tool.mypy.overrides]]
+module = [
+    "dependency_injector.*",
+    "requests.*",
+    "streamlit.*",
+    "git.*",
+    "sqlalchemy.*",
+    "alembic.*"
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "app.presentation.api.v1.routes.*"
+disallow_untyped_decorators = false
+disallow_untyped_defs = false
+
+[[tool.mypy.overrides]]
+module = "app.infrastructure.containers.*"
+disallow_subclassing_any = false
+
+# Pylint --------------------------------------
 [tool.pylint.main]
-ignore = ["tests"]
+ignore = ["tests", "alembic", "frontend"]
 
 [tool.pylint.messages_control]
-disable= ["C0114","C0115","C0116"]
+disable= [
+    "C0114",
+    "C0115",
+    "C0116",
+    "R0903",
+    "C0301",
+]
+
+[tool.pylint.format]
+max-line-length = 88
