@@ -14,6 +14,9 @@ from app.infrastructure.persistence.sql_alchemy.repositories.property_repository
 from app.infrastructure.persistence.sql_alchemy.repositories.transaction_repository import (
     TransactionRepository,
 )
+from app.infrastructure.persistence.sql_alchemy.repositories.user_repository import (
+    UserRepository,
+)
 
 
 class RepositoryContainer(containers.DeclarativeContainer):
@@ -35,4 +38,8 @@ class RepositoryContainer(containers.DeclarativeContainer):
 
     transaction_repository = providers.Factory(
         TransactionRepository,
+    )
+
+    user_repository = providers.Factory(
+        UserRepository,
     )

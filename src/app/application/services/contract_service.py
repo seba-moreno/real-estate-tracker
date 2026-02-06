@@ -3,7 +3,7 @@ from app.core.domain.entities.contract import Contract
 from app.core.interfaces.repositories.contract_repository import IContractRepository
 from app.core.interfaces.services.contract_service import IContractService
 from app.core.exceptions.domain_exceptions import PersistenceError, ValidationError
-from app.infrastructure.services.base_service import BaseService
+from app.application.services.base_service import BaseService
 
 
 class ContractService(BaseService[Contract], IContractService):

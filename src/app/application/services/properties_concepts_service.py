@@ -6,7 +6,7 @@ from app.core.interfaces.services.properties_concepts_service import (
     IPropertiesConceptsService,
 )
 from app.infrastructure.logging.logger_with_correlation_id import get_logger
-from app.infrastructure.services.base_service import BaseService
+from app.application.services.base_service import BaseService
 
 
 class PropertiesConceptsService(

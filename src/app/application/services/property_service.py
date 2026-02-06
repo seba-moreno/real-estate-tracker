@@ -1,6 +1,6 @@
 from app.core.domain.entities.property import Property
 from app.core.interfaces.repositories.base_repository import BaseRepository
-from app.infrastructure.services.base_service import BaseService
+from app.application.services.base_service import BaseService
 
 
 class PropertyService(BaseService[Property]):

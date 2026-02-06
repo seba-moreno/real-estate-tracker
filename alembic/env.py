@@ -1,5 +1,8 @@
+from dotenv import load_dotenv
+load_dotenv()
 import sys
 from pathlib import Path
+
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 SRC_DIR = BASE_DIR / "src"
@@ -11,6 +14,8 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from alembic import context
 from app.infrastructure.persistence.sql_alchemy.database import Base
+from app.infrastructure.persistence.sql_alchemy.models import *
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

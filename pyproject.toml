@@ -14,6 +14,7 @@ line-length = 88
 target-version = "py312"
 src = ["src"]
 exclude = ["alembic", "src/app/presentation/frontend"]
+ignore = ["E402"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -26,6 +27,7 @@ explicit_package_bases = true
 namespace_packages = true
 strict = true
 plugins = ["pydantic.mypy"]
+exclude = "^(src/app/presentation/frontend(/|$))"
 
 [[tool.mypy.overrides]]
 module = [
@@ -49,7 +51,15 @@ disallow_subclassing_any = false
 
 # Pylint --------------------------------------
 [tool.pylint.main]
-ignore = ["tests", "alembic", "frontend"]
+ignore = [
+    "tests",
+    "alembic",
+    "src/app/presentation/frontend",
+]
+ignore-paths = [
+    "src/app/presentation/frontend/.*"
+]
+
 
 [tool.pylint.messages_control]
 disable= [

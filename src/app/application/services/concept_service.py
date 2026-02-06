@@ -1,6 +1,6 @@
 from app.core.domain.entities.concept import Concept
 from app.core.interfaces.repositories.base_repository import BaseRepository
-from app.infrastructure.services.base_service import BaseService
+from app.application.services.base_service import BaseService
 
 
 class ConceptService(BaseService[Concept]):

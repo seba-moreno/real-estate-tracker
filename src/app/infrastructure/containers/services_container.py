@@ -1,11 +1,12 @@
 from dependency_injector import containers, providers
-from app.infrastructure.services.concept_service import ConceptService
-from app.infrastructure.services.contract_service import ContractService
-from app.infrastructure.services.properties_concepts_service import (
+from app.application.services.auth_service import AuthService
+from app.application.services.concept_service import ConceptService
+from app.application.services.contract_service import ContractService
+from app.application.services.properties_concepts_service import (
     PropertiesConceptsService,
 )
-from app.infrastructure.services.property_service import PropertyService
-from app.infrastructure.services.transaction_service import TransactionService
+from app.application.services.property_service import PropertyService
+from app.application.services.transaction_service import TransactionService
 
 
 class ServiceContainer(containers.DeclarativeContainer):
@@ -39,4 +40,10 @@ class ServiceContainer(containers.DeclarativeContainer):
         TransactionService,
         repository=repository_container.transaction_repository,
         entity_name="Transaction",
+    )
+
+    auth_service = providers.Factory(
+        AuthService,
+        repository=repository_container.user_repository,
+        entity_name="User",
     )

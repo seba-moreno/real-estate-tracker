@@ -7,6 +7,7 @@ class RootContainer(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         packages=[
             "app.presentation.api.v1.routes",
+            "app.core.security",
         ]
     )
 

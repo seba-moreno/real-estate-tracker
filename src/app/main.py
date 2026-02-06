@@ -1,4 +1,8 @@
-from fastapi import Depends, FastAPI
+from dotenv import load_dotenv
+
+load_dotenv()
+from app.core.security.auth import auth_required
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
@@ -12,6 +16,7 @@ from app.core.exceptions.domain_exceptions import NotFoundError, PersistenceErro
 from app.infrastructure.containers.root_container import RootContainer
 from app.infrastructure.persistence.sql_alchemy.database import get_db
 
+from app.presentation.api.v1.routes.auth import router as auth_router
 from app.presentation.api.v1.routes.concept import router as concept_router
 from app.presentation.api.v1.routes.contract import router as contract_router
 from app.presentation.api.v1.routes.properties_concepts import (
@@ -19,7 +24,6 @@ from app.presentation.api.v1.routes.properties_concepts import (
 )
 from app.presentation.api.v1.routes.property import router as property_router
 from app.presentation.api.v1.routes.transaction import router as transaction_router
-
 
 setup_logging()
 container = RootContainer()
@@ -42,6 +46,8 @@ app.add_middleware(RateLimiterMiddleware, requests_per_minute=100)
 
 
 API_V1_PREFIX = "/api/v1"
+app.include_router(auth_router, prefix=API_V1_PREFIX)
+secured_dependencies = [Depends(auth_required)]
 routers_v1 = [
     concept_router,
     contract_router,
@@ -51,16 +57,22 @@ routers_v1 = [
 ]
 
 for r in routers_v1:
-    app.include_router(r, prefix=API_V1_PREFIX)
+    app.include_router(r, prefix=API_V1_PREFIX, dependencies=secured_dependencies)
 
 
 @app.exception_handler(NotFoundError)
-def not_found_handler(_, exc) -> JSONResponse:
+def not_found_handler(
+    request: Request,
+    exc: NotFoundError,
+) -> JSONResponse:
     return JSONResponse(status_code=404, content={"detail": str(exc)})
 
 
 @app.exception_handler(PersistenceError)
-def persistence_handler(_, exc) -> JSONResponse:
+def persistence_handler(
+    request: Request,
+    exc: PersistenceError,
+) -> JSONResponse:
     return JSONResponse(
         status_code=500,
         content={"detail": "Internal database error"},

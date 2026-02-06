@@ -5,7 +5,7 @@ from app.core.interfaces.repositories.transaction_repository import (
     ITransactionRepository,
 )
 from app.core.interfaces.services.transaction_service import ITransactionService
-from app.infrastructure.services.base_service import BaseService
+from app.application.services.base_service import BaseService
 
 
 class TransactionService(BaseService[Transaction], ITransactionService):

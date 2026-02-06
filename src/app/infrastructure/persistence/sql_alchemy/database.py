@@ -1,14 +1,18 @@
 from __future__ import annotations
 
+import os
+import sys
 from typing import Iterator
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 
-SQLALCHEMY_DB_URL = (
-    "sqlite:///C:/Users/smorenocam001/Downloads/real-estate-tracker/src/database.db"
-)
+SQLALCHEMY_DB_URL = os.getenv("DATABASE_URL")
+
+if not SQLALCHEMY_DB_URL:
+    print("Error: DATABASE_URL environment variable is not set.")
+    sys.exit(1)
 
 engine: Engine = create_engine(
     SQLALCHEMY_DB_URL,
