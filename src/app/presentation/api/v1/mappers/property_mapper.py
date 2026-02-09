@@ -1,9 +1,11 @@
+from fastapi import HTTPException
 from app.core.domain.entities.property import Property
 from app.presentation.api.v1.schemas.property import PropertyBase, PropertyResponse
 
 
 def domain_to_response_schema(entity: Property) -> PropertyResponse:
-    assert entity.id is not None
+    if entity.id is None:
+        raise HTTPException(status_code=500, detail="Cannot map a Property with no id")
     return PropertyResponse(
         id=entity.id,
         location=entity.location,

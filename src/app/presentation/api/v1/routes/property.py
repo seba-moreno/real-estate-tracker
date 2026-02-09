@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from dependency_injector.wiring import inject, Provide
 from app.core.domain.entities.property import Property
 from app.core.interfaces.services.base_service import IBaseService
@@ -24,7 +24,8 @@ def get_property(
     ),
 ) -> PropertyResponse | None:
     domain_entity = service.get_by_id(property_id)
-    assert domain_entity is not None
+    if domain_entity is None:
+        raise HTTPException(status_code=404, detail="Property not found")
     return domain_to_response_schema(domain_entity)
 
 

@@ -1,9 +1,11 @@
+from fastapi import HTTPException
 from app.core.domain.entities.contract import Contract
 from app.presentation.api.v1.schemas.contract import ContractBase, ContractResponse
 
 
 def domain_to_response_schema(entity: Contract) -> ContractResponse:
-    assert entity.id is not None
+    if entity.id is None:
+        raise HTTPException(status_code=500, detail="Cannot map a Contract with no id")
     return ContractResponse(
         id=entity.id,
         property_id=entity.property_id,

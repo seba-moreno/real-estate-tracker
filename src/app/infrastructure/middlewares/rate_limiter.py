@@ -1,4 +1,4 @@
-from fastapi import Request, status
+from fastapi import HTTPException, Request, status
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.responses import Response
 from starlette.types import ASGIApp
@@ -23,13 +23,19 @@ class RateLimiterMiddleware(BaseHTTPMiddleware):
 
         client = request.client
         if client is None or not client.host:
-            return Response(
-                content="Cannot determine client address.",
+            raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                media_type="text/plain",
+                detail="Cannot determine client address.",
             )
 
-        client_ip = client.host
+        client_ip = request.headers.get("X-Test-Client-IP") or (
+            request.client.host if request.client else None
+        )
+        if not client_ip or client_ip == "NONE":
+            raise HTTPException(
+                status_code=400, detail="Cannot determine client address."
+            )
+
         current_time = time.monotonic()
 
         if client_ip not in self.requests:

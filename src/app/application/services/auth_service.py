@@ -62,19 +62,18 @@ class AuthService(IAuthService):
         )
 
     def register(self, user: UserCreate) -> None:
+        existent_user = self.repo.get_by_username(user.username)
+        if existent_user:
+            self.logger.warning(
+                "Register user attempt failed: username already exists",
+                extra={"username": user.username},
+            )
+            raise ValidationError(
+                "Register user attempt failed: the provided Username is already on use"
+            )
+
         try:
-            existent_user = self.repo.get_by_username(user.username)
-            if existent_user:
-                self.logger.warning(
-                    "Register user attempt failed: username already exists",
-                    extra={"username": user.username},
-                )
-                raise ValidationError(
-                    "Register user attempt failed: the provided Username is already on use"
-                )
-
             hashed = hash_password(user.password)
-
             db_user = User(
                 id=None,
                 username=user.username,
@@ -84,7 +83,6 @@ class AuthService(IAuthService):
                 created_at=datetime.now(timezone.utc),
                 updated_at=datetime.now(timezone.utc),
             )
-
             self.logger.info("Registering user", extra={"username": user.username})
             self.repo.create(db_user)
             self.logger.info(

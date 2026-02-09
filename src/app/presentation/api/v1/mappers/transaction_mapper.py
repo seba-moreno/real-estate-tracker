@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from app.core.domain.entities.transaction import Transaction
 from app.presentation.api.v1.schemas.transaction import (
     TransactionBase,
@@ -6,7 +7,10 @@ from app.presentation.api.v1.schemas.transaction import (
 
 
 def domain_to_response_schema(entity: Transaction) -> TransactionResponse:
-    assert entity.id is not None
+    if entity.id is None:
+        raise HTTPException(
+            status_code=500, detail="Cannot map a Transaction with no id"
+        )
     return TransactionResponse(
         id=entity.id,
         date=entity.date,

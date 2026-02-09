@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from dependency_injector.wiring import inject, Provide
 from app.core.interfaces.services.properties_concepts_service import (
     IPropertiesConceptsService,
@@ -46,7 +46,8 @@ def get_properties_concepts(
     ),
 ) -> PropertiesConceptsResponse | None:
     domain_entity = service.get_by_id(properties_concepts_id)
-    assert domain_entity is not None
+    if domain_entity is None:
+        raise HTTPException(status_code=404, detail="Property Concept not found")
     return domain_to_response_schema(domain_entity)
 
 

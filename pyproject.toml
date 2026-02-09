@@ -14,7 +14,10 @@ line-length = 88
 target-version = "py312"
 src = ["src"]
 exclude = ["alembic", "src/app/presentation/frontend"]
+
+[tool.ruff.lint]
 ignore = ["E402"]
+per-file-ignores = { "tests/*" = ["D", "S101", "PLR2004"] }
 
 [tool.ruff.format]
 quote-style = "double"
@@ -27,7 +30,10 @@ explicit_package_bases = true
 namespace_packages = true
 strict = true
 plugins = ["pydantic.mypy"]
-exclude = "^(src/app/presentation/frontend(/|$))"
+exclude = [
+    "^(src/app/presentation/frontend(/|$))",
+    "^tests/"
+]  
 
 [[tool.mypy.overrides]]
 module = [
@@ -72,3 +78,23 @@ disable= [
 
 [tool.pylint.format]
 max-line-length = 88
+
+#Pytest -------------------------------------
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-ra -q --cov=app --cov-report=term-missing"
+
+[tool.coverage.run]
+branch = true
+source = ["app"]
+omit = [
+  "*/__init__.py",
+  "app/**/migrations/*",
+  "app/**/schemas.py",      # (optional) if you don’t want to count pydantic-only files
+  "tests/*"
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true

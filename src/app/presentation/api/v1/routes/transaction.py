@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from dependency_injector.wiring import inject, Provide
 from app.core.interfaces.services.transaction_service import ITransactionService
 from app.presentation.api.v1.schemas.transaction import (
@@ -45,7 +45,8 @@ def get_transaction(
     ),
 ) -> TransactionResponse | None:
     domain_entity = service.get_by_id(transaction_id)
-    assert domain_entity is not None
+    if domain_entity is None:
+        raise HTTPException(status_code=404, detail="Transaction not found")
     return domain_to_response_schema(domain_entity)
 
 

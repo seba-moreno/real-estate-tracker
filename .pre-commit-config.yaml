@@ -5,14 +5,17 @@ repos:
     hooks:
       - id: ruff
         args: ["--fix"]
+        files: ^src/
       - id: ruff-format
+        files: ^src/
 
-  # --- Pylint (install runtime deps into hook env) ---
+  # --- Pylint ---
   - repo: https://github.com/pycqa/pylint
     rev: v3.2.6
     hooks:
       - id: pylint
         args: ["--exit-zero"]
+        files: ^src/
         additional_dependencies:
           - sqlalchemy
           - dependency-injector
@@ -22,15 +25,13 @@ repos:
           - gitpython
         exclude: ^alembic/|src/app/presentation/frontend/
 
-  # --- Mypy (type checking; with plugin & runtime deps) ---
+  # --- Mypy ---
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.11.1
     hooks:
       - id: mypy
         args: ["--config-file=pyproject.toml"]
-        exclude: |
-          ^src/app/presentation/frontend/|
-          ^alembic/
+        files: ^src/
         additional_dependencies:
           - "pydantic>=2"
           - "pydantic[mypy]"

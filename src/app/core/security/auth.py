@@ -17,21 +17,32 @@ def auth_required(
         Provide[RootContainer.repositories.user_repository]
     ),
 ) -> str:
+    if credentials is None:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authenticated",
+        )
+
     token = credentials.credentials
     try:
         claims = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         username = claims.get("sub")
         if not isinstance(username, str):
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token",
             )
     except jwt.ExpiredSignatureError:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token expired",
         )
+    except HTTPException:
+        raise
     except Exception:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
         )
 
     user = repo.get_by_username(username)

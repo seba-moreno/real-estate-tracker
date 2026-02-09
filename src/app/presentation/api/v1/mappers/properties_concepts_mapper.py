@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from app.core.domain.entities.properties_concepts import PropertiesConcepts
 from app.presentation.api.v1.schemas.properties_concepts import (
     PropertiesConceptsBase,
@@ -12,7 +13,10 @@ from app.presentation.api.v1.mappers.concept_mapper import (
 
 
 def domain_to_response_schema(entity: PropertiesConcepts) -> PropertiesConceptsResponse:
-    assert entity.id is not None
+    if entity.id is None:
+        raise HTTPException(
+            status_code=500, detail="Cannot map a Property Concept with no id"
+        )
     return PropertiesConceptsResponse(
         id=entity.id,
         concept_id=entity.concept_id,

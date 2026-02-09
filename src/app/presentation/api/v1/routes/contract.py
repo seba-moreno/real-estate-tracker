@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from dependency_injector.wiring import inject, Provide
 from app.core.interfaces.services.contract_service import IContractService
 from app.infrastructure.containers.root_container import RootContainer
@@ -35,7 +35,8 @@ def get_contract(
     ),
 ) -> ContractResponse | None:
     domain_entity = service.get_by_id(contract_id)
-    assert domain_entity is not None
+    if domain_entity is None:
+        raise HTTPException(status_code=404, detail="Contract not found")
     return domain_to_response_schema(domain_entity)
 
 
